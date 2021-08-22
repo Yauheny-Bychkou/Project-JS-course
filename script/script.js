@@ -42,5 +42,124 @@ window.addEventListener("DOMContentLoaded", function () {
       updateClock();
     }, 1000);
   }
-  countTimer("22 august 2021");
+  countTimer("23 august 2021");
+
+  const toggleMenu = () => {
+    const btnMenu = document.querySelector(".menu"),
+      menu = document.querySelector("menu"),
+      main = document.querySelector("main"),
+      closeBtn = document.querySelector(".close-btn"),
+      menuItems = menu.querySelectorAll("ul>li"),
+      hightWindow = window.innerWidth,
+      total = 46,
+      count = -100;
+
+    const openModal = () => {
+      if (hightWindow > 768) {
+        const animate = ({ timing, draw, duration }) => {
+          let start = performance.now();
+
+          requestAnimationFrame(function animate(time) {
+            // timeFraction изменяется от 0 до 1
+            let timeFraction = (time - start) / duration;
+            if (timeFraction > 1) {
+              timeFraction = 1;
+            }
+            // вычисление текущего состояния анимации
+            let progress = timing(timeFraction);
+
+            draw(progress); // отрисовать её
+
+            if (timeFraction < 1) {
+              requestAnimationFrame(animate);
+            }
+          });
+        };
+        animate({
+          duration: 1000,
+          timing(timeFraction) {
+            return timeFraction;
+          },
+          draw(progress) {
+            menu.style.transform = `translateX(${progress * (total + 100) - 100}%)`;
+          },
+        });
+      }
+    };
+    const closeModal = () => {
+      const animate = ({ timing, draw, duration }) => {
+        let start = performance.now();
+
+        requestAnimationFrame(function animate(time) {
+          // timeFraction изменяется от 0 до 1
+          let timeFraction = (time - start) / duration;
+          if (timeFraction > 1) {
+            timeFraction = 1;
+          }
+          // вычисление текущего состояния анимации
+          let progress = timing(timeFraction);
+
+          draw(progress); // отрисовать её
+
+          if (timeFraction < 1) {
+            requestAnimationFrame(animate);
+          }
+        });
+      };
+      animate({
+        duration: 1000,
+        timing(timeFraction) {
+          return timeFraction;
+        },
+        draw(progress) {
+          menu.style.transform = `translateX(${progress * count}%)`;
+        },
+      });
+    };
+    btnMenu.addEventListener("click", function () {
+      if (!menu.style.transform || menu.style.transform === `translateX(-100%)`) {
+        openModal();
+      } else if (menu.style.transform === `translateX(46%)`) {
+        closeModal();
+      }
+    });
+    closeBtn.addEventListener("click", function () {
+      closeModal();
+    });
+    menuItems.forEach((elem) => {
+      elem.addEventListener("click", function () {
+        closeModal();
+      });
+    });
+
+    document.querySelectorAll('a[href^="#"').forEach((link) => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const blockID = this.getAttribute("href").substr(1);
+
+        document.getElementById(blockID).scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    });
+  };
+
+  toggleMenu();
+  const togglePopUp = () => {
+    const popup = document.querySelector(".popup"),
+      popupBtn = document.querySelectorAll(".popup-btn"),
+      popupClose = document.querySelector(".popup-close");
+
+    popupBtn.forEach((elem) => {
+      elem.addEventListener("click", () => {
+        popup.style.display = "block";
+      });
+    });
+    popupClose.addEventListener("click", () => {
+      popup.style.display = "none";
+    });
+  };
+  togglePopUp();
 });
