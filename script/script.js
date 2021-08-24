@@ -56,11 +56,10 @@ window.addEventListener("DOMContentLoaded", function () {
 
     menu.addEventListener("click", (event) => {
       let target = event.target;
-      target = target.closest(".close-btn");
 
-      if (target) {
+      if (target.classList.contains("close-btn")) {
         handlerMenu();
-      } else {
+      } else if (target.tagName === "A") {
         handlerMenu();
         event.preventDefault();
         const blockID = event.target.getAttribute("href").substr(1);
