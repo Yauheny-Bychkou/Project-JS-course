@@ -45,19 +45,17 @@ window.addEventListener("DOMContentLoaded", function () {
   countTimer("23 august 2021");
 
   const toggleMenu = () => {
-    const btnMenu = document.querySelector(".menu"),
-      menu = document.querySelector("menu");
+    const menu = document.querySelector("menu");
 
     const handlerMenu = () => {
       menu.classList.toggle("active-menu");
     };
 
-    btnMenu.addEventListener("click", handlerMenu);
-
-    menu.addEventListener("click", (event) => {
+    document.addEventListener("click", (event) => {
       let target = event.target;
-
-      if (target.classList.contains("close-btn")) {
+      if (target.closest(".menu")) {
+        handlerMenu();
+      } else if (target.classList.contains("close-btn")) {
         handlerMenu();
       } else if (target.tagName === "A") {
         handlerMenu();
