@@ -65,6 +65,8 @@ window.addEventListener("DOMContentLoaded", function () {
           behavior: "smooth",
           block: "start",
         });
+      } else if (!target.classList.contains("close-btn")) {
+        menu.classList.remove("active-menu");
       }
     });
   };
