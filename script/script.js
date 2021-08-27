@@ -280,10 +280,53 @@ window.addEventListener("DOMContentLoaded", function () {
   const validateInput = () => {
     let block = document.querySelector(".footer-form-input");
     let calcItem = document.querySelectorAll(".calc-item");
-    let inputName = document.getElementById("form2-name");
-    let inputMessage = document.getElementById("form2-message");
-    let inputEmail = document.getElementById("form2-email");
-    let inputPhone = document.getElementById("form2-phone");
+    let inputs = document.querySelectorAll("input");
+
+    inputs.forEach((elem) => {
+      if (elem.getAttribute("name") === "user_name") {
+        elem.addEventListener("blur", () => {
+          if (elem.value.match(/[а-яА-ЯёЁ\-\ ]/g)) {
+            let arr = elem.value.split(" ");
+            let newArr = [];
+
+            arr.forEach((word) => {
+              word = word[0].toUpperCase() + word.slice(1);
+              newArr.push(word);
+            });
+            elem.value = newArr.join(" ");
+          }
+          elem.value = elem.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
+          elem.value = elem.value.replace(/\ +/g, " ");
+          elem.value = elem.value.replace(/\-+/g, "-");
+          elem.value = elem.value.replace(/^[\s\-]+/g, "");
+          elem.value = elem.value.replace(/[\s\-]+$/g, "");
+        });
+      } else if (elem.getAttribute("name") === "user_email") {
+        elem.addEventListener("blur", () => {
+          elem.value = elem.value.replace(/[^a-zA-Z\@-\_\.\~\!\*\']/g, "");
+          elem.value = elem.value.replace(/\ +/g, " ");
+          elem.value = elem.value.replace(/\-+/g, "-");
+          elem.value = elem.value.replace(/^[\s\-]+/g, "");
+          elem.value = elem.value.replace(/[\s\-]+$/g, "");
+        });
+      } else if (elem.getAttribute("name") === "user_phone") {
+        elem.addEventListener("blur", () => {
+          elem.value = elem.value.replace(/[^0-9\(\)\-]/g, "");
+          elem.value = elem.value.replace(/\ +/g, " ");
+          elem.value = elem.value.replace(/\-+/g, "-");
+          elem.value = elem.value.replace(/^[\s\-]+/g, "");
+          elem.value = elem.value.replace(/[\s\-]+$/g, "");
+        });
+      } else if (elem.getAttribute("name") === "user_message") {
+        elem.addEventListener("blur", () => {
+          elem.value = elem.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
+          elem.value = elem.value.replace(/\ +/g, " ");
+          elem.value = elem.value.replace(/\-+/g, "-");
+          elem.value = elem.value.replace(/^[\s\-]+/g, "");
+          elem.value = elem.value.replace(/[\s\-]+$/g, "");
+        });
+      }
+    });
 
     calcItem.forEach((elem, n) => {
       if (n !== 0) {
@@ -317,40 +360,6 @@ window.addEventListener("DOMContentLoaded", function () {
     //     }
     //   }
     // });
-
-    inputName.addEventListener("blur", () => {
-      if (inputName.value.match(/[а-яА-ЯёЁ\-\ ]/g)) {
-        inputName.value = inputName.value[0].toUpperCase() + inputName.value.slice(1);
-      }
-      inputName.value = inputName.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
-      inputName.value = inputName.value.replace(/\ +/g, " ");
-      inputName.value = inputName.value.replace(/\-+/g, "-");
-      inputName.value = inputName.value.replace(/^[\s\-]+/g, "");
-      inputName.value = inputName.value.replace(/[\s\-]+$/g, "");
-    });
-
-    inputMessage.addEventListener("blur", () => {
-      inputMessage.value = inputMessage.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
-      inputMessage.value = inputMessage.value.replace(/\ +/g, " ");
-      inputMessage.value = inputMessage.value.replace(/\-+/g, "-");
-      inputMessage.value = inputMessage.value.replace(/^[\s\-]+/g, "");
-      inputMessage.value = inputMessage.value.replace(/[\s\-]+$/g, "");
-    });
-
-    inputEmail.addEventListener("blur", () => {
-      inputEmail.value = inputEmail.value.replace(/[^a-zA-Z\@-\_\.\~\!\*\']/g, "");
-      inputEmail.value = inputEmail.value.replace(/\ +/g, " ");
-      inputEmail.value = inputEmail.value.replace(/\-+/g, "-");
-      inputEmail.value = inputEmail.value.replace(/^[\s\-]+/g, "");
-      inputEmail.value = inputEmail.value.replace(/[\s\-]+$/g, "");
-    });
-    inputPhone.addEventListener("blur", () => {
-      inputPhone.value = inputPhone.value.replace(/[^0-9\(\)\-]/g, "");
-      inputPhone.value = inputPhone.value.replace(/\ +/g, " ");
-      inputPhone.value = inputPhone.value.replace(/\-+/g, "-");
-      inputPhone.value = inputPhone.value.replace(/^[\s\-]+/g, "");
-      inputPhone.value = inputPhone.value.replace(/[\s\-]+$/g, "");
-    });
   };
 
   validateInput();
