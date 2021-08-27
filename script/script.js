@@ -265,6 +265,95 @@ window.addEventListener("DOMContentLoaded", function () {
   };
 
   slider();
+
+  const changeImage = () => {
+    let image = document.querySelectorAll(".command__photo");
+    image.forEach((elem) => {
+      elem.addEventListener("mouseenter", (e) => {
+        e.target.src = e.target.dataset.img;
+      });
+    });
+  };
+
+  changeImage();
+
+  const validateInput = () => {
+    let block = document.querySelector(".footer-form-input");
+    let calcItem = document.querySelectorAll(".calc-item");
+    let inputName = document.getElementById("form2-name");
+    let inputMessage = document.getElementById("form2-message");
+    let inputEmail = document.getElementById("form2-email");
+    let inputPhone = document.getElementById("form2-phone");
+
+    calcItem.forEach((elem, n) => {
+      if (n !== 0) {
+        elem.addEventListener("input", () => {
+          elem.value = elem.value.replace(/\D/g, "");
+        });
+      }
+    });
+
+    // block.addEventListener("keyup", (event) => {
+    //   let target = event.target;
+
+    //   if (target.matches("#form2-name")) {
+    //     if (target.value.match(/[^а-яА-ЯёЁ\-\ ]/g, "")) {
+    //       target.value = target.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
+    //     }
+    //   }
+    //   if (target.matches("#form2-message")) {
+    //     if (target.value.match(/[^а-яА-ЯёЁ\-\ ]/g, "")) {
+    //       target.value = target.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
+    //     }
+    //   }
+    //   if (target.matches("#form2-email")) {
+    //     if (target.value.match(/[^a-zA-Z\@-\_\.\~\!\*\']/g, "")) {
+    //       target.value = target.value.replace(/[^a-zA-Z\@-\_\.\~\!\*\']/g, "");
+    //     }
+    //   }
+    //   if (target.matches("#form2-phone")) {
+    //     if (target.value.match(/[^0-9\(\)\-]/g, "")) {
+    //       target.value = target.value.replace(/[^0-9\(\)\-]/g, "");
+    //     }
+    //   }
+    // });
+
+    inputName.addEventListener("blur", () => {
+      if (inputName.value.match(/[а-яА-ЯёЁ\-\ ]/g)) {
+        inputName.value = inputName.value[0].toUpperCase() + inputName.value.slice(1);
+      }
+      inputName.value = inputName.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
+      inputName.value = inputName.value.replace(/\ +/g, " ");
+      inputName.value = inputName.value.replace(/\-+/g, "-");
+      inputName.value = inputName.value.replace(/^[\s\-]+/g, "");
+      inputName.value = inputName.value.replace(/[\s\-]+$/g, "");
+    });
+
+    inputMessage.addEventListener("blur", () => {
+      inputMessage.value = inputMessage.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
+      inputMessage.value = inputMessage.value.replace(/\ +/g, " ");
+      inputMessage.value = inputMessage.value.replace(/\-+/g, "-");
+      inputMessage.value = inputMessage.value.replace(/^[\s\-]+/g, "");
+      inputMessage.value = inputMessage.value.replace(/[\s\-]+$/g, "");
+    });
+
+    inputEmail.addEventListener("blur", () => {
+      inputEmail.value = inputEmail.value.replace(/[^a-zA-Z\@-\_\.\~\!\*\']/g, "");
+      inputEmail.value = inputEmail.value.replace(/\ +/g, " ");
+      inputEmail.value = inputEmail.value.replace(/\-+/g, "-");
+      inputEmail.value = inputEmail.value.replace(/^[\s\-]+/g, "");
+      inputEmail.value = inputEmail.value.replace(/[\s\-]+$/g, "");
+    });
+    inputPhone.addEventListener("blur", () => {
+      inputPhone.value = inputPhone.value.replace(/[^0-9\(\)\-]/g, "");
+      inputPhone.value = inputPhone.value.replace(/\ +/g, " ");
+      inputPhone.value = inputPhone.value.replace(/\-+/g, "-");
+      inputPhone.value = inputPhone.value.replace(/^[\s\-]+/g, "");
+      inputPhone.value = inputPhone.value.replace(/[\s\-]+$/g, "");
+    });
+  };
+
+  validateInput();
 });
 
 // let block = document.querySelector(".col-md-2");
