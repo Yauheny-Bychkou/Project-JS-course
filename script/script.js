@@ -295,7 +295,7 @@ window.addEventListener("DOMContentLoaded", function () {
             });
             elem.value = newArr.join(" ");
           }
-          elem.value = elem.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
+          elem.value = elem.value.replace(/[^а-яА-ЯёЁ\ ]/g, "");
           elem.value = elem.value.replace(/\ +/g, " ");
           elem.value = elem.value.replace(/\-+/g, "-");
           elem.value = elem.value.replace(/^[\s\-]+/g, "");
@@ -311,7 +311,7 @@ window.addEventListener("DOMContentLoaded", function () {
         });
       } else if (elem.getAttribute("name") === "user_phone") {
         elem.addEventListener("blur", () => {
-          elem.value = elem.value.replace(/[^0-9\(\)\-]/g, "");
+          elem.value = elem.value.replace(/[^0-9\+]/g, "");
           elem.value = elem.value.replace(/\ +/g, " ");
           elem.value = elem.value.replace(/\-+/g, "-");
           elem.value = elem.value.replace(/^[\s\-]+/g, "");
@@ -319,7 +319,7 @@ window.addEventListener("DOMContentLoaded", function () {
         });
       } else if (elem.getAttribute("name") === "user_message") {
         elem.addEventListener("blur", () => {
-          elem.value = elem.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
+          elem.value = elem.value.replace(/[^а-яА-ЯёЁ0-9\-\,\.\!\:\;\ ]/g, "");
           elem.value = elem.value.replace(/\ +/g, " ");
           elem.value = elem.value.replace(/\-+/g, "-");
           elem.value = elem.value.replace(/^[\s\-]+/g, "");
@@ -335,31 +335,6 @@ window.addEventListener("DOMContentLoaded", function () {
         });
       }
     });
-
-    // block.addEventListener("keyup", (event) => {
-    //   let target = event.target;
-
-    //   if (target.matches("#form2-name")) {
-    //     if (target.value.match(/[^а-яА-ЯёЁ\-\ ]/g, "")) {
-    //       target.value = target.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
-    //     }
-    //   }
-    //   if (target.matches("#form2-message")) {
-    //     if (target.value.match(/[^а-яА-ЯёЁ\-\ ]/g, "")) {
-    //       target.value = target.value.replace(/[^а-яА-ЯёЁ\-\ ]/g, "");
-    //     }
-    //   }
-    //   if (target.matches("#form2-email")) {
-    //     if (target.value.match(/[^a-zA-Z\@-\_\.\~\!\*\']/g, "")) {
-    //       target.value = target.value.replace(/[^a-zA-Z\@-\_\.\~\!\*\']/g, "");
-    //     }
-    //   }
-    //   if (target.matches("#form2-phone")) {
-    //     if (target.value.match(/[^0-9\(\)\-]/g, "")) {
-    //       target.value = target.value.replace(/[^0-9\(\)\-]/g, "");
-    //     }
-    //   }
-    // });
   };
 
   validateInput();
@@ -444,6 +419,74 @@ window.addEventListener("DOMContentLoaded", function () {
   };
 
   calc(100);
-});
 
-// let block = document.querySelector(".col-md-2");
+
+  //send-ajax-form
+
+  const sendForm = ()=>{
+    const errorMessage = 'Что-то пошло нет так...',
+    loadMessage = 'Загрузка...',
+    successMesage = 'Спасибо! Мы скоро с вами свяжемся!';
+    
+
+    const form = document.querySelectorAll('form');
+    
+    const loaddMessage = document.createElement('div');
+    const loaddSquare = document.createElement('div');
+    const stususMessage = document.createElement('div');
+    loaddMessage.classList.add('example');
+    loaddSquare.classList.add('sk-plane');
+    stususMessage.style.cssText = 'font-size: 2rem';
+    stususMessage.style.cssText = 'color: #fff';
+    
+    form.forEach((elem)=>{
+      elem.addEventListener('submit', (event)=>{
+      const input = elem.querySelectorAll("input"); 
+      
+      event.preventDefault(); 
+      elem.appendChild(stususMessage);
+      elem.appendChild(loaddMessage);
+      loaddMessage.appendChild(loaddSquare);
+      stususMessage.textContent = loadMessage;
+      const formData = new FormData(elem);
+      let body = {};
+      formData.forEach((val, key) => {
+      body[key] = val;
+      });
+
+      const postData = (body, outputData, errorData) => {
+         const request = new XMLHttpRequest();
+       request.addEventListener("readystatechange", () => {
+        if(request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200){
+          loaddMessage.remove();
+          outputData();
+        } else {
+          errorData(request.status);
+        }
+      });
+      request.open("POST", "./server.php");
+      request.setRequestHeader("Content-type", "application/json");
+      request.send(JSON.stringify(body));
+      };
+      
+     postData(body, ()=>{
+          stususMessage.textContent = successMesage;
+        }, (error)=>{
+          stususMessage.textContent = errorMessage;
+          console.error(error);
+        });
+
+        input.forEach((input)=>{
+        input.value = '';
+        });
+         
+      });
+    });
+  };
+
+  sendForm();
+
+});
