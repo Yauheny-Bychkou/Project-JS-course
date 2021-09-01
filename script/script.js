@@ -420,73 +420,73 @@ window.addEventListener("DOMContentLoaded", function () {
 
   calc(100);
 
-
   //send-ajax-form
 
-  const sendForm = ()=>{
-    const errorMessage = 'Что-то пошло нет так...',
-    loadMessage = 'Загрузка...',
-    successMesage = 'Спасибо! Мы скоро с вами свяжемся!';
-    
+  const sendForm = () => {
+    const errorMessage = "Что-то пошло нет так...",
+      loadMessage = "Загрузка...",
+      successMesage = "Спасибо! Мы скоро с вами свяжемся!";
 
-    const form = document.querySelectorAll('form');
-    
-    const loaddMessage = document.createElement('div');
-    const loaddSquare = document.createElement('div');
-    const stususMessage = document.createElement('div');
-    loaddMessage.classList.add('example');
-    loaddSquare.classList.add('sk-plane');
-    stususMessage.style.cssText = 'font-size: 2rem';
-    stususMessage.style.cssText = 'color: #fff';
-    
-    form.forEach((elem)=>{
-      elem.addEventListener('submit', (event)=>{
-      const input = elem.querySelectorAll("input"); 
-      
-      event.preventDefault(); 
-      elem.appendChild(stususMessage);
-      elem.appendChild(loaddMessage);
-      loaddMessage.appendChild(loaddSquare);
-      stususMessage.textContent = loadMessage;
-      const formData = new FormData(elem);
-      let body = {};
-      formData.forEach((val, key) => {
-      body[key] = val;
-      });
+    const form = document.querySelectorAll("form");
 
-      const postData = (body, outputData, errorData) => {
-         const request = new XMLHttpRequest();
-       request.addEventListener("readystatechange", () => {
-        if(request.readyState !== 4) {
-          return;
-        }
-        if (request.status === 200){
-          loaddMessage.remove();
-          outputData();
-        } else {
-          errorData(request.status);
-        }
-      });
-      request.open("POST", "./server.php");
-      request.setRequestHeader("Content-type", "application/json");
-      request.send(JSON.stringify(body));
-      };
-      
-     postData(body, ()=>{
+    const loaddMessage = document.createElement("div");
+    const loaddSquare = document.createElement("div");
+    const stususMessage = document.createElement("div");
+    loaddMessage.classList.add("example");
+    loaddSquare.classList.add("sk-plane");
+    stususMessage.style.cssText = "font-size: 2rem";
+    stususMessage.style.cssText = "color: #fff";
+
+    form.forEach((elem) => {
+      elem.addEventListener("submit", (event) => {
+        const input = elem.querySelectorAll("input");
+
+        event.preventDefault();
+        elem.appendChild(stususMessage);
+        elem.appendChild(loaddMessage);
+        loaddMessage.appendChild(loaddSquare);
+        stususMessage.textContent = loadMessage;
+        const formData = new FormData(elem);
+        let body = {};
+        formData.forEach((val, key) => {
+          body[key] = val;
+        });
+
+        const postData = (body) => {
+          return new Promise((resolve, reject) => {
+            const request = new XMLHttpRequest();
+            request.addEventListener("readystatechange", () => {
+              if (request.readyState !== 4) {
+                return;
+              }
+              if (request.status === 200) {
+                loaddMessage.remove();
+                resolve();
+              } else {
+                reject(request.statusText);
+              }
+            });
+            request.open("POST", "./server.php");
+            request.setRequestHeader("Content-type", "application/json");
+            request.send(JSON.stringify(body));
+          });
+        };
+        const outputMessage = () => {
           stususMessage.textContent = successMesage;
-        }, (error)=>{
-          stususMessage.textContent = errorMessage;
-          console.error(error);
-        });
+        };
 
-        input.forEach((input)=>{
-        input.value = '';
-        });
-         
+        postData(body)
+          .then(outputMessage)
+          .catch((error) => console.log(error))
+          .finally(() => {
+            console.log("test");
+            input.forEach((input) => {
+              input.value = "";
+            });
+          });
       });
     });
   };
 
   sendForm();
-
 });
