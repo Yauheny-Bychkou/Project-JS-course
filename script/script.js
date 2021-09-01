@@ -479,7 +479,6 @@ window.addEventListener("DOMContentLoaded", function () {
           .then(outputMessage)
           .catch((error) => console.log(error))
           .finally(() => {
-            console.log("test");
             input.forEach((input) => {
               input.value = "";
             });
