@@ -453,35 +453,29 @@ window.addEventListener("DOMContentLoaded", function () {
         });
 
         const postData = (body) => {
-          return new Promise((resolve, reject) => {
-            const request = new XMLHttpRequest();
-            request.addEventListener("readystatechange", () => {
-              if (request.readyState !== 4) {
-                return;
-              }
-              if (request.status === 200) {
-                loaddMessage.remove();
-                resolve();
-              } else {
-                reject(request.statusText);
-              }
-            });
-            request.open("POST", "./server.php");
-            request.setRequestHeader("Content-type", "application/json");
-            request.send(JSON.stringify(body));
+          return fetch("./server.php", {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify(body),
           });
-        };
-        const outputMessage = () => {
-          stususMessage.textContent = successMesage;
         };
 
         postData(body)
-          .then(outputMessage)
-          .catch((error) => console.log(error))
-          .finally(() => {
+          .then((response) => {
+            if (response.status !== 200) {
+              throw new Error("status netwokr not 200");
+            }
+            stususMessage.textContent = successMesage;
+            loaddMessage.remove();
             input.forEach((input) => {
               input.value = "";
             });
+          })
+          .catch((error) => {
+            stususMessage.textContent = errorMessage;
+            console.error(error);
           });
       });
     });
