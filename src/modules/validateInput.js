@@ -24,7 +24,6 @@ const validateInput = () => {
       });
     } else if (elem.getAttribute("name") === "user_email") {
       elem.addEventListener("blur", () => {
-        elem.pattern = "[A-Za-z]{6,}";
         elem.value = elem.value.replace(/[^a-zA-Z\@-\_\.\~\!\*\']/g, "");
         elem.value = elem.value.replace(/\ +/g, " ");
         elem.value = elem.value.replace(/\-+/g, "-");
