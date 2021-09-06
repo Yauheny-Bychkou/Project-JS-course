@@ -9,7 +9,7 @@ import validateInput from "./modules/validateInput";
 import calc from "./modules/calc";
 import sendForm from "./modules/sendForm";
 
-countTimer("08 september 2021");
+countTimer("09 september 2021");
 
 toggleMenu();
 
