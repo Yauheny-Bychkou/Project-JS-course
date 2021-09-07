@@ -2,11 +2,10 @@ const togglePopUp = () => {
   const popup = document.querySelector(".popup"),
     popupBtn = document.querySelectorAll(".popup-btn"),
     hightWindow = window.innerWidth;
+  if (hightWindow > 768) {
+    popup.style.opacity = 0;
 
-  popup.style.opacity = 0;
-
-  const openPopUp = () => {
-    if (hightWindow > 768) {
+    const openPopUp = () => {
       const animate = ({ timing, draw, duration }) => {
         let start = performance.now();
 
@@ -26,7 +25,6 @@ const togglePopUp = () => {
           }
         });
       };
-
       animate({
         duration: 500,
         timing(timeFraction) {
@@ -36,28 +34,50 @@ const togglePopUp = () => {
           popup.style.opacity = progress * 1;
         },
       });
-    }
-  };
+    };
 
-  popupBtn.forEach((elem) => {
-    elem.addEventListener("click", () => {
-      if (!popup.style.display || popup.style.display === "none") {
-        openPopUp();
-        popup.style.display = "initial";
+    popupBtn.forEach((elem) => {
+      elem.addEventListener("click", () => {
+        if (!popup.style.display || popup.style.display === "none") {
+          openPopUp();
+          popup.style.display = "initial";
+        }
+      });
+    });
+
+    popup.addEventListener("click", (event) => {
+      let target = event.target;
+      if (target.classList.contains("popup-close")) {
+        popup.style.display = "none";
+      } else {
+        target = target.closest(".popup-content");
+        if (!target) {
+          popup.style.display = "none";
+        }
       }
     });
-  });
+  }
 
-  popup.addEventListener("click", (event) => {
-    let target = event.target;
-    if (target.classList.contains("popup-close")) {
-      popup.style.display = "none";
-    } else {
-      target = target.closest(".popup-content");
-      if (!target) {
+  if (hightWindow < 768) {
+    popupBtn.forEach((elem) => {
+      elem.addEventListener("click", () => {
+        if (!popup.style.display || popup.style.display === "none") {
+          popup.style.display = "initial";
+        }
+      });
+    });
+
+    popup.addEventListener("click", (event) => {
+      let target = event.target;
+      if (target.classList.contains("popup-close")) {
         popup.style.display = "none";
+      } else {
+        target = target.closest(".popup-content");
+        if (!target) {
+          popup.style.display = "none";
+        }
       }
-    }
-  });
+    });
+  }
 };
 export default togglePopUp;
